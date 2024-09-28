@@ -1,0 +1,7 @@
+# required in root folder for rust-analyzer to work
+
+[workspace]
+
+members = [
+  "zcr"
+]

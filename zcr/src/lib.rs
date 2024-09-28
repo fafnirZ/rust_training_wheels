@@ -42,7 +42,7 @@ pub fn zero_copy(from: &str, to: &str) -> Result<bool, io::Error> {
     
 
     // mmap
-    // assumes there is concurrent access
+    // assumes there is NO concurrent access
     // otherwise a mutex is required
     let mmap = unsafe {
         Mmap::map(&input_file)?

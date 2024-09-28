@@ -15,7 +15,9 @@ use std::io;
 // https://doc.rust-lang.org/std/result/#:~:text=Result%20is,and%20containing%20an%20error%20value.&text=Functions%20return%20Result%20whenever%20errors%20are%20expected%20and%20recoverable.
 pub fn normal_copy(from: &str, to: &str) -> Result<bool, io::Error> {
     // open source file
-    let input_file = File::open(from)?;
+    let input_file = File::open(from)
+                                .map_err(|_| io::Error::new(io::ErrorKind::NotFound, "input file not found"))?;
+
     let mut reader = BufReader::new(input_file);
 
     // open dest for writing

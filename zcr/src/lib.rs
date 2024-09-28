@@ -35,7 +35,6 @@ pub fn normal_copy(from: &str, to: &str) -> Result<bool, io::Error> {
     Ok(true)
 }
 
-// TODO
 pub fn zero_copy(from: &str, to: &str) -> Result<bool, io::Error> {
     // open source file
     let input_file = File::open(from)

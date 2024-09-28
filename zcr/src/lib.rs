@@ -50,8 +50,8 @@ mod tests {
         println!("Currdir: {}", path.display());
 
 
-        let ok = normal_copy("seed/test.csv", "test_out/new.csv");
-        // assert!(ok.is_ok());
+        let ok = normal_copy("seed/file.csv", "test_out/new.csv");
+        assert!(ok.is_ok());
         let is_success = ok.unwrap();
         assert_eq!(is_success, true);
     }

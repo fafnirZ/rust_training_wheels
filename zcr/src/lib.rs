@@ -90,9 +90,12 @@ mod tests {
     #[test]
     fn zero_copy_works() {
         // testing fn
-        let ok = normal_copy("seed/file.csv", "test_out/zero_c.csv");
+        let ok = zero_copy("seed/file.csv", "test_out/zero_c.csv");
         assert!(ok.is_ok());
         let is_success = ok.unwrap();
         assert_eq!(is_success, true);
     }
+
+
+
 }

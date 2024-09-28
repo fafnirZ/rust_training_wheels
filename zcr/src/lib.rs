@@ -34,7 +34,9 @@ pub fn normal_copy(from: &str, to: &str) -> Result<bool, io::Error> {
 }
 
 // TODO
-pub fn zero_copy() {}
+pub fn zero_copy() {
+    
+}
 
 
 
@@ -49,7 +51,7 @@ mod tests {
         let path = env::current_dir().unwrap();
         println!("Currdir: {}", path.display());
 
-
+        // testing fn
         let ok = normal_copy("seed/file.csv", "test_out/new.csv");
         assert!(ok.is_ok());
         let is_success = ok.unwrap();

@@ -3,5 +3,6 @@
 [workspace]
 
 members = [
-  "zcr"
+  "zcr",
+  "rle",
 ]

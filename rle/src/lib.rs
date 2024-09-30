@@ -65,6 +65,12 @@ mod tests {
     }
 
     #[test]
+    fn case4() {
+        let res = rle_encode("a").unwrap();
+        assert_eq!(res, "1a");
+    }
+
+    #[test]
     fn err_case1() {
         let err = rle_encode("").unwrap_err();
         assert_eq!(err, CustomError);

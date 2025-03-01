@@ -1,8 +1,0 @@
-# required in root folder for rust-analyzer to work
-
-[workspace]
-
-members = [
-  "zcr",
-  "rle", "huffman", "flate", "pyo3_thread_bench", "pyo3_thread_bench/regex_maturin",
-]

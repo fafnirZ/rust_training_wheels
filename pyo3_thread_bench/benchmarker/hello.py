@@ -1,5 +1,7 @@
 import re
 import time
+
+from tqdm import tqdm
 import regex_maturin
 
 
@@ -105,7 +107,59 @@ data = [
     ("Fruit: Orange", r"Orange"),
     ("Vegetable: Carrot", r"Carrot"),
     ("Month: December", r"December"),
-    ("Day: Monday", r"Monday")
+    ("Day: Monday", r"Monday"),
+    ("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", r"(a{2}){1,20}a?$"), # Controlled repetition
+    ("1234567890123456789012345678901234567890", r"^(1?0?){1,30}1?$"), # Alternating optional characters
+    ("The quick brown fox jumps over the lazy dog.", r"(?:.*?(fox|dog)){1,3}?"), # Non-greedy matching with alternation
+    ("123-456-7890", r"^(?!.*abc)(?:[0-9]-?){1,5}[0-9]+$"), # Negative lookahead with controlled repetition
+    ("example@email.com", r"[a-zA-Z0-9._%+-]{5,20}@[a-zA-Z0-9.-]{3,10}.[a-zA-Z]{2,4}"), # Bounded character classes
+    ("Hello, World!", r"(?:.*?(Hello|World)){1,2}?"), # Non-greedy matching with alternation
+    ("This is a test string.", r"(?:.*?\d{1,3}){1,3}?"), # Non-greedy matching with bounded digits
+    ("Python is a powerful language.", r"(?:.*?(Python|language)){1,2}?"), # Non-greedy matching with alternation
+    ("12345", r"^(?:[0-9]{1,2}){1,3}$"), # Bounded digit repetition
+    ("apple banana cherry", r"(?:\b\w{3,6}\b){1,3}"), # Bounded word length
+    ("http://www.example.com", r"https?://(?:[a-zA-Z0-9.-]{3,15}.){1,2}[a-zA-Z]{2,4}"), # Bounded domain components
+    ("A1B2C3D4", r"(?:[A-Z][0-9]){1,4}"), # Alternating character types
+    ("My name is John.", r"(?:.*?(John|name)){1,2}?"), # Non-greedy matching with alternation
+    ("The cat sat on the mat.", r"(?:.*?(cat|mat)){1,2}?"), # Non-greedy matching with alternation
+    ("1.23 4.56 7.89", r"(?:\d.\d{2}){1,3}"), # Fixed decimal pattern
+    ("This is a sentence with some words.", r"(?:\w{3,8}\s?){3,10}"), # Bounded word length with optional space
+    ("Date: 2023-10-27", r"\d{4}-\d{2}-\d{2}"), # Standard date pattern
+    ("Price: $99.99", r"\$\d{1,3}.\d{2}"), # Standard price pattern
+    ("User ID: 123456", r"\d{6}"), # Fixed digit length
+    ("File name: document.txt", r"\w{3,10}.\w{3,4}"), # Bounded file name components
+    ("IP address: 192.168.1.1", r"(?:\d{1,3}.){3}\d{1,3}"), # Fixed IP address pattern
+    ("Status: OK", r"OK"), # Simple match
+    ("Error code: 404", r"\d{3}"), # Fixed digit length
+    ("Version: 1.2.3", r"\d.\d.\d"), # Standard version pattern
+    ("Color: red", r"red"), # Simple match
+    ("Size: large", r"large"), # Simple match
+    ("Product: Widget", r"Widget"), # Simple match
+    ("Location: New York", r"New York"), # Simple match
+    ("Time: 12:30", r"\d{2}:\d{2}"), # Standard time pattern
+    ("Message: Hello there!", r"Hello there!"), # Simple match
+    ("Count: 10", r"\d{1,3}"), # Bounded digit length
+    ("Value: 3.14", r"\d.\d{2}"), # Fixed decimal pattern
+    ("Key: abc", r"abc"), # Simple match
+    ("Code: XYZ123", r"[A-Z]{3}\d{3}"), # Fixed pattern
+    ("ID: 56789", r"\d{5}"), # Fixed digit length
+    ("Token: aBcDeFg", r"[a-zA-Z]{5,10}"), # Bounded character length
+    ("Path: /home/user", r"/(?:\w+/){1,3}\w+"), # Bounded path components
+    ("URL: https://example.org", r"https?://[a-zA-Z0-9.-]{3,15}.[a-zA-Z]{2,4}"), # Bounded URL pattern
+    ("Word: example", r"example"), # Simple match
+    ("Number: 987", r"\d{3}"), # Fixed digit length
+    ("Text: some text", r"some text"), # Simple match
+    ("Data: 1,2,3", r"\d,\d,\d"), # Fixed data pattern
+    ("Info: details", r"details"), # Simple match
+    ("Name: Alice", r"Alice"), # Simple match
+    ("City: London", r"London"), # Simple match
+    ("Country: France", r"France"), # Simple match
+    ("Job: Developer", r"Developer"), # Simple match
+    ("Animal: Dog", r"Dog"), # Simple match
+    ("Fruit: Orange", r"Orange"), # Simple match
+    ("Vegetable: Carrot", r"Carrot"), # Simple match
+    ("Month: December", r"December"), # Simple match
+    ("Day: Monday", r"Monday") # Simple match
 ]
 
 
@@ -134,7 +188,8 @@ def test_threaded_python():
                 )
             )
 
-        for future in futures:
+
+        for future in tqdm(futures, "performing"):
             future.result()
     
 
@@ -168,7 +223,7 @@ def test_threaded_rust():
                 )
             )
 
-        for future in futures:
+        for future in tqdm(futures, "performing"):
             future.result()
 
     # print(results) 
@@ -210,14 +265,51 @@ def test_threaded_rust_indices():
                 )
             )
 
-        for future in futures:
+        for future in tqdm(futures, "performing"):
             future.result()
 
     # print(results) 
     t_1 = time.time()
-    print(f"Rust took: {(t_1 - t_0) * 1000}ms")
+    print(f"Rust w/ string creation took: {(t_1 - t_0) * 1000}ms")
+
+
+
+def test_threaded_rust_indices_no_str():
+    
+    from concurrent.futures import ThreadPoolExecutor
+
+    def worker_fn(content, regex, results):
+
+        results.append(
+            regex_maturin.regex_match_index(content, regex)
+        )
+
+    results = []
+
+    t_0 = time.time()
+
+    with ThreadPoolExecutor(max_workers=8) as tp:
+        
+        futures = []
+        for content, regex_pattern in data:
+            futures.append(
+                tp.submit(
+                    worker_fn,
+                    content,
+                    regex_pattern,
+                    results,
+                )
+            )
+
+        for future in tqdm(futures, "performing"):
+            future.result()
+
+    # print(results) 
+    t_1 = time.time()
+    print(f"Rust w/o str creation took: {(t_1 - t_0) * 1000}ms")
 
 if __name__ == "__main__":
     test_threaded_python()
     test_threaded_rust()
     test_threaded_rust_indices()
+    test_threaded_rust_indices_no_str()

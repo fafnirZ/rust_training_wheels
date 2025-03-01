@@ -1,0 +1,17 @@
+[package]
+name = "regex_maturin"
+version = "0.1.0"
+edition = "2021"
+
+
+[lib]
+name = "regex_maturin"
+crate-type = ["cdylib"] # necessary to produce shared lib for python
+
+
+[dependencies]
+
+
+[dependencies.pyo3]
+version = "0.23.1"
+features = ["abi3-py38"]

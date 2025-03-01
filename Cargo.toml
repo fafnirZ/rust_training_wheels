@@ -4,5 +4,5 @@
 
 members = [
   "zcr",
-  "rle", "huffman", "flate",
+  "rle", "huffman", "flate", "pyo3_thread_bench", "pyo3_thread_bench/regex_maturin",
 ]

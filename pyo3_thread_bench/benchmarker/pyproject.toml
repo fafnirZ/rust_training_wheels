@@ -1,0 +1,12 @@
+[project]
+name = "benchmarker"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "regex-maturin",
+]
+
+[tool.uv.sources]
+regex-maturin = { path = "../regex_maturin" }

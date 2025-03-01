@@ -1,13 +1,21 @@
 use pyo3::prelude::*;
 use regex::Regex;
 
-fn rust_regex_nogil(contents: &str, regex_pattern: &str) -> Option<String> {
+fn rust_regex_nogil(contents: &str, regex_pattern: &str) -> Option<Vec<String>> {
     let re = Regex::new(regex_pattern).ok()?; // returns None if regex compilation fails
-    re.find(contents).map(|m| m.as_str().to_string()) // automatically returns
+    let matches: Vec<String> = re.find_iter(contents)
+                                    .map(|m| m.as_str().to_string())
+                                    .collect();
+
+    if matches.is_empty() {
+        None
+    } else {
+        Some(matches)
+    }
 }
 
 #[pyfunction]
-fn regex_match(py: Python<'_>, contents: &str, regex_pattern: &str) -> PyResult<Option<String>>{
+fn regex_match(py: Python<'_>, contents: &str, regex_pattern: &str) -> PyResult<Option<Vec<String>>>{
     let result = py.allow_threads(|| rust_regex_nogil(contents, regex_pattern));
     Ok(result)
 }

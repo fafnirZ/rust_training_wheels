@@ -1,0 +1,18 @@
+version = 1
+requires-python = ">=3.13"
+
+[[package]]
+name = "benchmarker"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "regex-maturin" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "regex-maturin", directory = "../regex_maturin" }]
+
+[[package]]
+name = "regex-maturin"
+version = "0.1.0"
+source = { directory = "../regex_maturin" }

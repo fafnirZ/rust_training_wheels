@@ -10,9 +10,12 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "regex-maturin", directory = "../regex_maturin" }]
+requires-dist = [{ name = "regex-maturin", path = "../regex_maturin/release/regex_maturin-0.1.0-cp38-abi3-manylinux_2_34_x86_64.whl" }]
 
 [[package]]
 name = "regex-maturin"
 version = "0.1.0"
-source = { directory = "../regex_maturin" }
+source = { path = "../regex_maturin/release/regex_maturin-0.1.0-cp38-abi3-manylinux_2_34_x86_64.whl" }
+wheels = [
+    { filename = "regex_maturin-0.1.0-cp38-abi3-manylinux_2_34_x86_64.whl", hash = "sha256:0d77e9786ed347ba60c5b5f0883783b29756f1fc6d9167b92a28d400bbd79875" },
+]

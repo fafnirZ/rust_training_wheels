@@ -9,4 +9,4 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-regex-maturin = { path = "../regex_maturin" }
+regex-maturin = { path = "../regex_maturin/release/regex_maturin-0.1.0-cp38-abi3-manylinux_2_34_x86_64.whl" }

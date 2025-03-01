@@ -17,5 +17,5 @@ name = "regex-maturin"
 version = "0.1.0"
 source = { path = "../regex_maturin/release/regex_maturin-0.1.0-cp38-abi3-manylinux_2_34_x86_64.whl" }
 wheels = [
-    { filename = "regex_maturin-0.1.0-cp38-abi3-manylinux_2_34_x86_64.whl", hash = "sha256:0d77e9786ed347ba60c5b5f0883783b29756f1fc6d9167b92a28d400bbd79875" },
+    { filename = "regex_maturin-0.1.0-cp38-abi3-manylinux_2_34_x86_64.whl", hash = "sha256:ec8e45c983182ce44fe745774bb73596590de332c221359b8f73a145eaa2bdaf" },
 ]

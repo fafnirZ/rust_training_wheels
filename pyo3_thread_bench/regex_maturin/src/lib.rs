@@ -14,9 +14,28 @@ fn rust_regex_nogil(contents: &str, regex_pattern: &str) -> Option<Vec<String>> 
     }
 }
 
+fn rust_regex_nogil_indices(contents: &str, regex_pattern: &str) -> Option<Vec<(usize, usize)>> {
+    let re = Regex::new(regex_pattern).ok()?;
+    let matches: Vec<(usize, usize)> = re
+        .find_iter(contents)
+        .map(|m| (m.start(), m.end()))
+        .collect();
+
+    if matches.is_empty() {
+        None
+    } else {
+        Some(matches)
+    }
+}
+
 #[pyfunction]
 fn regex_match(py: Python<'_>, contents: &str, regex_pattern: &str) -> PyResult<Option<Vec<String>>>{
     let result = py.allow_threads(|| rust_regex_nogil(contents, regex_pattern));
+    Ok(result)
+}
+#[pyfunction]
+fn regex_match_index(py: Python<'_>, contents: &str, regex_pattern: &str) -> PyResult<Option<Vec<(usize, usize)>>>{
+    let result = py.allow_threads(|| rust_regex_nogil_indices(contents, regex_pattern));
     Ok(result)
 }
 
@@ -28,5 +47,6 @@ fn regex_match(py: Python<'_>, contents: &str, regex_pattern: &str) -> PyResult<
 #[pymodule]
 fn regex_maturin(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(regex_match, m)?);
+    m.add_function(wrap_pyfunction!(regex_match_index, m)?);
     Ok(())
 }

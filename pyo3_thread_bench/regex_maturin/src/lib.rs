@@ -13,8 +13,12 @@ fn regex_match(py: Python<'_>, contents: &str, regex_pattern: &str) -> PyResult<
 }
 
 
+// https://pyo3.rs/main/getting-started.html?#running-code
+/// A Python module implemented in Rust. The name of this function must match
+/// the `lib.name` setting in the `Cargo.toml`, else Python will not be able to
+/// import the module.
 #[pymodule]
-fn rust_regex(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(regex_match, m)?)?;
+fn regex_maturin(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(regex_match, m)?);
     Ok(())
 }
